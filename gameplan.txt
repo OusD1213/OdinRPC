@@ -1,0 +1,4 @@
+same choice comparison
+if statement computer choice 
+    if statement your choose
+    else if another choice 
