@@ -1,56 +1,78 @@
 const computerSelection = () => {
   const options = ["rock", "paper", "scissors"];
-  const random = Math.floor(Math.random() * options.length);
-  const randomChoice = options[random];
-  return randomChoice.toUpperCase();
-};
-
-const playerSelection = () => {
-  const playerChoice = prompt("Choose between rock-paper-scissors");
-  return playerChoice.toUpperCase();
+  return options[Math.floor(Math.random() * options.length)].toUpperCase();
 };
 
 const playRound = (computerSelection, playerSelection, playerScore) => {
+  const writeResults = document.querySelector('div');
+  const writing = document.createElement('p');
+  
   if (computerSelection == playerSelection) {
-    console.log("It was a tie");
+    writing.textContent = "It was a tie";
   } else if (computerSelection == "ROCK") {
     if (playerSelection == "PAPER") {
-      console.log("You win! Paper beats Rock");
+      writing.textContent = "You win! Paper beats Rock";
       playerScore += 1;
     } else {
-      console.log("You lost! Rock beats Scissors");
+      writing.textContent = "You lost! Rock beats Scissors";
     }
   } else if (computerSelection == "PAPER") {
     if (playerSelection == "ROCK") {
-      console.log("You lost. Paper beats Rock");
+      writing.textContent = "You lost. Paper beats Rock";
     } else {
-      console.log("You win! Scissors beats Paper");
+      writing.textContent = "You win! Scissors beats Paper";
       playerScore += 1;
     }
   } else if (computerSelection == "SCISSORS") {
     if (playerSelection == "PAPER") {
-      console.log("You lost. Scissors beat Paper");
+      writing.textContent = "You lost. Scissors beat Paper";
     } else {
-      console.log("You win! Rock beats Scissors");
+      writing.textContent = "You win! Rock beats Scissors";
       playerScore += 1;
     }
   }
+  writeResults.appendChild(writing);
   return playerScore;
 };
+
+const displayResult = (result) => {
+  const resultElement = document.createElement('h1');
+  resultElement.textContent = result;
+  document.body.appendChild(resultElement);
+};
+
 const game = () => {
   let playerScore = 0;
-  for (let round = 0; round < 5; round++) {
-    playerScore = playRound(
-      playerSelection(),
-      computerSelection(),
-      playerScore
-    );
-  }
+  let roundsPlayed = 0;
+  const btns = document.querySelectorAll("button");
 
-  if (playerScore >= 3) {
-    console.log(`You Won with a score of :${playerScore}/5 !!!!`);
-  } else {
-    console.log(`You Lost with a score of ${playerScore}/5 =(`);
-  }
+  buttonClickHandler = 
+  btns.forEach((button) => {
+    button.addEventListener("click", () => {
+      const playerSelection = button.textContent.toUpperCase();
+      playerScore = playRound(
+        computerSelection(),
+        playerSelection,
+        playerScore
+    );
+      roundsPlayed++;
+
+      if (roundsPlayed === 5) {
+        if (playerScore >= 3) {
+          displayResult(`You Won with a score of :${playerScore}/5 !!!!`);
+        } else {
+          displayResult(`You Lost with a score of ${playerScore}/5 =(`);
+        }
+        setTimeout(() =>{
+          location.reload();
+        }, 1500);
+        
+        btns.forEach((button) => button.removeEventListener('click', buttonClickHandler))
+
+      }
+    });
+  });
 };
+
 game();
+
